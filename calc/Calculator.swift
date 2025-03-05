@@ -8,18 +8,6 @@ class Calculator {
     }
     
     func calculate(args: [String]) -> String {
-        for arg in args {
-            
-        }
-        
-//        let firstInput:Int? = inputArray[0].wholeNumberValue
-//        let secondInput:Int? = inputArray[4].wholeNumberValue
-//        
-//        if (firstInput != nil) && (secondInput != nil) {
-//            self.currentResult = String(add(firstInput: firstInput!, secondInput: secondInput!))
-//        } else {
-//            self.currentResult =  "Calculation should have valid numbers! (Calculation Example: 1 + 2)"
-//        }
-//        return currentResult!
+        return String(add(firstInput: Int(args[0])!, secondInput: Int(args[2])!))
     }
 }
