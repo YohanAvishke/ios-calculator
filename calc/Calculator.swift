@@ -1,37 +1,21 @@
-//
-//  Calculator.swift
-//  calc
-//
-//  Created by Jacktator on 31/3/20.
-//  Copyright © 2020 UTS. All rights reserved.
-//
-
 import Foundation
 
 class Calculator {
+    var currentResult:String?
     
-    /// For multi-step calculation, it's helpful to persist existing result
-    var currentResult = 0;
-    
-    /// Perform Addition
-    ///
-    /// - Author: Jacktator
-    /// - Parameters:
-    ///   - no1: First number
-    ///   - no2: Second number
-    /// - Returns: The addition result
-    ///
-    /// - Warning: The result may yield Int overflow.
-    /// - SeeAlso: https://developer.apple.com/documentation/swift/int/2884663-addingreportingoverflow
-    func add(no1: Int, no2: Int) -> Int {
-        return no1 + no2;
+    func add(firstInput: Int, secondInput: Int) -> Int {
+        return firstInput + secondInput
     }
     
-    func calculate(args: [String]) -> String {
-        // Todo: Calculate Result from the arguments. Replace dummyResult with your actual result;
-        let dummyResult = add(no1: 1, no2: 2);
+    func calculate(inputArray: [Character]) -> String {
+        let firstInput:Int? = inputArray[0].wholeNumberValue
+        let secondInput:Int? = inputArray[4].wholeNumberValue
         
-        let result = String(dummyResult);
-        return(result)
+        if (firstInput != nil) && (secondInput != nil) {
+            self.currentResult = String(add(firstInput: firstInput!, secondInput: secondInput!))
+        } else {
+            self.currentResult =  "Calculation should have valid numbers! (Calculation Example: 1 + 2)"
+        }
+        return currentResult!
     }
 }

@@ -1,25 +1,17 @@
-//
-//  main.swift
-//  calc
-//
-//  Created by Jesse Clark on 12/3/18.
-//  Copyright © 2018 UTS. All rights reserved.
-//
-
 import Foundation
 
 var args = ProcessInfo.processInfo.arguments
-args.removeFirst() // remove the name of the program
+args.removeFirst()
+let calculator = Calculator()
 
-// Retrieve User Input
-//let no1 = args[0]; // Sample Code Only! Update Required!
-//let operator = args[1]; // Sample Code Only! Update Required!
-//let no2 = args[2]; // Sample Code Only! Update Required!
+print("Start your Calculation:")
+if let input = readLine() {
+    let inputArray = Array(input)
+    let result: String = calculator.calculate(inputArray: inputArray)
+    print(result)
+} else {
+    print("Calculation cannot be empty! (Calculation Example: 1 + 2)")
+}
 
-// Initialize a Calculator object
-let calculator = Calculator();
-
-// Calculate the result
-let result = calculator.add(no1: 1, no2: 1);
-
-print(result)
+// TODO
+// Decimal support
