@@ -1,8 +1,6 @@
 /// Class to work with infix Strings
-struct Infix {
+struct PostFixExpression {
     // Function to determine the precedence of operators
-    /// - Parameter char: The operator character
-    /// - Returns: An integer representing the precedence level
     func precedence(_ char: Character) -> Int {
         switch char {
             case "^": return 3 // Highest precedence for exponentiation
@@ -13,25 +11,25 @@ struct Infix {
     }
     
     /// Function to convert an infix expression to postfix notation
-    /// - Parameter infix: The infix expression as a string
-    /// - Returns: The equivalent postfix expression as a string
-    func converterToPostfix(_ infix: String) -> String {
+    /// Eg: infix = a + b * c + d; postfix = a b c * + d +
+    func infixToPostfix(_ infix: String) -> String {
         var postFix: String = ""
-        var stack = Stack()
+        var stack = Stack<Character>()
         
         for char in infix {
             if char.isNumber {
                 postFix.append(char)
             } else {
+                // operators are arranged according to match BODMAS rules
                 while let top = stack.peek(), precedence(char) <= precedence(top) {
-                    postFix.append(stack.pop()) // Pop higher or equal precedence operators from stack
+                    postFix.append(stack.pop()!)
                 }
                 stack.push(char)
             }
         }
         // Pop all the remaining operators from the stack and append to postfix expression
-        while stack.peek() != nil {
-            postFix.append(stack.pop())
+        while !stack.isEmpty {
+            postFix.append(stack.pop()!)
         }
         
         return postFix
