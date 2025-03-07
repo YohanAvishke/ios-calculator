@@ -1,29 +1,29 @@
 import Foundation
 
 /// To handle geenric errors of the Stack data type
-enum StackError: Error {
+private enum StackError: Error {
     case emptyStack
 }
 
 /// Define a Stack data strcuture
-struct Stack {
-    private var items: [Character] = []
-    
-    /// Access the items array and return the first item or null
-    /// - Returns: String
-    func peek() -> Character? {
-        return items.first
+public struct Stack <Element> {
+    private var items: [Element] = []
+    public var isEmpty: Bool {
+        peek() == nil
     }
     
-    /// Remove and return the first item
-    /// - Returns: String
-    mutating func pop() -> Character {
-        return items.removeFirst()
+    /// Get the last item
+    public func peek() -> Element? {
+        return items.last
     }
     
-    /// Insert an item into the Stack
-    /// - Parameter element: String
-    mutating func push(_ element: Character) {
-        items.insert(element, at: 0)
+    /// Remove and return the last item
+    public mutating func pop() -> Element? {
+        return items.popLast()
+    }
+    
+    /// Insert an item to the end of the Stack
+    public mutating func push(_ element: Element) {
+        items.append(element)
     }
 }
