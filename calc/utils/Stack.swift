@@ -7,25 +7,23 @@ enum StackError: Error {
 
 /// Define a Stack data strcuture
 struct Stack {
-    private var items: [String] = []
+    private var items: [Character] = []
     
-    /// Access the items array and return the first item in a safe way
-    /// - Returns: First element of 'items'
-    func peek() throws -> String {
-        // if topElement is null throw StackError
-        guard let topElement = items.first else { throw StackError.emptyStack }
-        return topElement
+    /// Access the items array and return the first item or null
+    /// - Returns: String
+    func peek() -> Character? {
+        return items.first
     }
     
     /// Remove and return the first item
-    /// - Returns: First item of the Stack
-    mutating func pop() -> String {
+    /// - Returns: String
+    mutating func pop() -> Character {
         return items.removeFirst()
     }
     
     /// Insert an item into the Stack
-    /// - Parameter element: String to be insterted
-    mutating func push(_ element: String) {
+    /// - Parameter element: String
+    mutating func push(_ element: Character) {
         items.insert(element, at: 0)
     }
 }
