@@ -21,7 +21,20 @@ public class Calculator {
         return firstOp % secondOp
     }
     
+    private func validateArgs(_ args: [String]) -> Bool {
+        var isValid = true
+        if args.count % 2 == 0 {
+            isValid = false
+        }
+        
+        return isValid
+    }
+    
     public func calculate(_ args: [String]) -> Int {
+        if !validateArgs(args) {
+            exit(1)
+        }
+        
         let postFixExpression = PostFixExpression()
         var stack = Stack<Int>()
         
