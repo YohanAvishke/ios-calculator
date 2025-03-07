@@ -1,10 +1,5 @@
 import Foundation
 
-/// To handle geenric errors of the Stack data type
-private enum StackError: Error {
-    case emptyStack
-}
-
 /// Define a Stack data strcuture
 public struct Stack <Element> {
     private var items: [Element] = []
