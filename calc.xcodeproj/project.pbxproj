@@ -14,6 +14,7 @@
 		3CF665BF24335A1500EC9CF2 /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF665BE24335A1500EC9CF2 /* Calculator.swift */; };
 		B57CE9882D7A88650017101E /* PostFixExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57CE9872D7A88600017101E /* PostFixExpression.swift */; };
 		B57CE98B2D7A8AAE0017101E /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57CE98A2D7A8AAB0017101E /* Stack.swift */; };
+		B57CE98E2D7ABF450017101E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57CE98D2D7ABF420017101E /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		3CF665BE24335A1500EC9CF2 /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
 		B57CE9872D7A88600017101E /* PostFixExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFixExpression.swift; sourceTree = "<group>"; };
 		B57CE98A2D7A8AAB0017101E /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		B57CE98D2D7ABF420017101E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,7 @@
 		B57CE9892D7A8A9D0017101E /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				B57CE98D2D7ABF420017101E /* String.swift */,
 				B57CE98A2D7A8AAB0017101E /* Stack.swift */,
 			);
 			path = utils;
@@ -222,6 +225,7 @@
 			files = (
 				B57CE98B2D7A8AAE0017101E /* Stack.swift in Sources */,
 				054418F62055EFEB008C821B /* main.swift in Sources */,
+				B57CE98E2D7ABF450017101E /* String.swift in Sources */,
 				B57CE9882D7A88650017101E /* PostFixExpression.swift in Sources */,
 				3CF665BF24335A1500EC9CF2 /* Calculator.swift in Sources */,
 			);

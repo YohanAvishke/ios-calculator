@@ -22,19 +22,18 @@ public class Calculator {
     }
     
     public func calculate(_ args: [String]) -> Int {
-        var formulae = args.joined()
         let postFixExpression = PostFixExpression()
         var stack = Stack<Int>()
         
-        formulae = postFixExpression.infixToPostfix(formulae)
+        let postfixExpression = postFixExpression.infixToPostfix(args)
         
-        for char in formulae {
-            if let num = char.wholeNumberValue {
+        for elem in postfixExpression {
+            if let num = Int(elem) {
                 stack.push(num)
             } else {
                 let firstNum = stack.pop()!
                 let secondNum = stack.pop()!
-                switch char {
+                switch elem {
                     case "+":
                         stack.push(add(firstOp: secondNum, secondOp: firstNum))
                     case "-":
@@ -43,8 +42,10 @@ public class Calculator {
                         stack.push(multiply(firstOp: secondNum, secondOp: firstNum))
                     case "/":
                         stack.push(divide(firstOp: secondNum, secondOp: firstNum))
+                    case "%":
+                        stack.push(modulus(firstOp: secondNum, secondOp: firstNum))
                     default:
-                        fatalError("Unknown operator: \(char)")
+                        fatalError("Unknown operator: \(elem)")
                 }
             }
         }
