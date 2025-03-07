@@ -4,7 +4,7 @@ public struct PostFixExpression {
     private func precedence(_ char: Character) -> Int {
         switch char {
             case "^": return 3 // Highest precedence for exponentiation
-            case "x", "/": return 2 // Multiplication and division have higher precedence than addition/subtraction
+            case "x", "/", "%": return 2 // Multiplication, division and modulus have higher precedence than addition/subtraction
             case "+", "-": return 1 // Lowest precedence for addition and subtraction
             default: return -1 // Return -1 for non-operator characters
         }

@@ -1,57 +1,54 @@
 import Foundation
 
-class Calculator {
-    var currentResult:String?
-    
-    func add(firstNum: Int, secondNum: Int) -> Int {
-        return firstNum + secondNum
-    }
-    func subtract(firstNum: Int, secondNum: Int) -> Int {
-        return firstNum - secondNum
+public class Calculator {
+    private func add(firstOp: Int, secondOp: Int) -> Int {
+        return firstOp + secondOp
     }
     
-    func divide(firstNum: Int, secondNum: Int) -> Int {
-        // secondNum cannot be 0
-        return firstNum / secondNum
+    private func subtract(firstOp: Int, secondOp: Int) -> Int {
+        return firstOp - secondOp
     }
     
-    func multiply(firstNum: Int, secondNum: Int) -> Int {
-        return firstNum * secondNum
+    private func divide(firstOp: Int, secondOp: Int) -> Int {
+        return firstOp / secondOp
     }
     
-    func modulus(firstNum: Int, secondNum: Int) -> Int {
-        return firstNum % secondNum
+    private func multiply(firstOp: Int, secondOp: Int) -> Int {
+        return firstOp * secondOp
     }
     
-    func calculate(args: [String]) -> String {
-        var args = ["1","+","1"]
-        if args.count % 2 == 0 {
-            return "Invalid Calucation Expression!"
-        }
+    private func modulus(firstOp: Int, secondOp: Int) -> Int {
+        return firstOp % secondOp
+    }
+    
+    public func calculate(_ args: [String]) -> Int {
+        var formulae = args.joined()
+        let postFixExpression = PostFixExpression()
+        var stack = Stack<Int>()
         
-        var result:String = "Invalid Character provided!"
+        formulae = postFixExpression.infixToPostfix(formulae)
         
-        for i in stride(from: 1, to: args.count-1, by: 2) {
-            let curentOpChar = args[i]
-            let nextOpChar = args[i+2]
-            
-        }
-        
-        for i in stride(from: 0, to: args.count, by: 3) {
-            let firstNum = Int(args[i])!
-            let operatorChar = args[i+1]
-            let secondNum = Int(args[i+2])!
-            
-            switch  operatorChar {
-            case "+":
-                result = add(firstNum: firstNum, secondNum: secondNum)
-            case "-":
-                result = subtract(firstNum: firstNum, secondNum: secondNum)
-            default:
-                break
+        for char in formulae {
+            if let num = char.wholeNumberValue {
+                stack.push(num)
+            } else {
+                let firstNum = stack.pop()!
+                let secondNum = stack.pop()!
+                switch char {
+                    case "+":
+                        stack.push(add(firstOp: secondNum, secondOp: firstNum))
+                    case "-":
+                        stack.push(subtract(firstOp: secondNum, secondOp: firstNum))
+                    case "x":
+                        stack.push(multiply(firstOp: secondNum, secondOp: firstNum))
+                    case "/":
+                        stack.push(divide(firstOp: secondNum, secondOp: firstNum))
+                    default:
+                        fatalError("Unknown operator: \(char)")
+                }
             }
         }
         
-        return result
+        return stack.pop()!
     }
 }
