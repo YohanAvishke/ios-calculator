@@ -10,6 +10,10 @@ public class Calculator {
     }
     
     private func divide(firstOp: Int, secondOp: Int) -> Int {
+        if secondOp == 0 {
+            print("Division by zero is not allowed")
+            exit(1)
+        }
         return firstOp / secondOp
     }
     
@@ -18,6 +22,10 @@ public class Calculator {
     }
     
     private func modulus(firstOp: Int, secondOp: Int) -> Int {
+        if secondOp == 0 {
+            print("Modulus by zero is not allowed")
+            exit(1)
+        }
         return firstOp % secondOp
     }
     
