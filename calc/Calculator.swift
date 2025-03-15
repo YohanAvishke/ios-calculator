@@ -9,10 +9,9 @@ public class Calculator {
         return firstOp - secondOp
     }
     
-    private func divide(firstOp: Int, secondOp: Int) -> Int {
+    private func divide(firstOp: Int, secondOp: Int) throws -> Int {
         if secondOp == 0 {
-            print("Division by zero is not allowed")
-            exit(1)
+            throw DivisonError.dividedByZero
         }
         return firstOp / secondOp
     }
@@ -21,35 +20,33 @@ public class Calculator {
         return firstOp * secondOp
     }
     
-    private func modulus(firstOp: Int, secondOp: Int) -> Int {
+    private func modulus(firstOp: Int, secondOp: Int) throws -> Int {
         if secondOp == 0 {
-            print("Modulus by zero is not allowed")
-            exit(1)
+            throw ModulusError.dividedByZero
         }
         return firstOp % secondOp
     }
     
-    private func validateArgs(_ args: [String]) -> Bool {
-        var isValid = true
+    private func validateArgs(_ args: [String]) throws {
         if args.count % 2 == 0 {
-            isValid = false
+            throw CalculatorCoreError.invalidNumberofArguments
         }
-        
-        return isValid
     }
     
     public func calculate(_ args: [String]) -> Int {
-        if !validateArgs(args) {
+        do {
+            try validateArgs(args)
+        } catch {
+            print("Error: Invalid number of arguments.")
             exit(1)
         }
         
-        let postFixExpression = PostFixExpression()
-        var stack = Stack<Int>()
+        let postfixExpression: [String] = PostFixExpression().infixToPostfix(args)
+        var stack: Stack<Int> = Stack<Int>()
         
-        let postfixExpression = postFixExpression.infixToPostfix(args)
         
         for elem in postfixExpression {
-            if let num = Int(elem) {
+            if let num: Int = Int(elem) {
                 stack.push(num)
             } else {
                 let firstNum = stack.pop()!
@@ -62,15 +59,30 @@ public class Calculator {
                     case "x":
                         stack.push(multiply(firstOp: secondNum, secondOp: firstNum))
                     case "/":
-                        stack.push(divide(firstOp: secondNum, secondOp: firstNum))
+                        do {
+                            try stack.push(divide(firstOp: secondNum, secondOp: firstNum))
+                        } catch DivisonError.dividedByZero {
+                            print("Error: Denominator cannot be 0 for divisiion operation.")
+                            exit(1)
+                        } catch {
+                            print(error)
+                            exit(1)
+                        }
                     case "%":
-                        stack.push(modulus(firstOp: secondNum, secondOp: firstNum))
+                        do {
+                            try stack.push(modulus(firstOp: secondNum, secondOp: firstNum))
+                        } catch ModulusError.dividedByZero {
+                            print("Error: Denominator cannot be 0 for modulus operation.")
+                            exit(1)
+                        } catch {
+                            print(error)
+                            exit(1)
+                        }
                     default:
                         fatalError("Unknown operator: \(elem)")
                 }
             }
         }
-        
         return stack.pop()!
     }
 }
