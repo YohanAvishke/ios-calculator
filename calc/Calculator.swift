@@ -1,88 +1,117 @@
 import Foundation
 
 public class Calculator {
-    private func add(firstOp: Int, secondOp: Int) -> Int {
-        return firstOp + secondOp
+    private func add(firstOperand: Int, secondOperand: Int) -> Int {
+        return firstOperand + secondOperand
     }
     
-    private func subtract(firstOp: Int, secondOp: Int) -> Int {
-        return firstOp - secondOp
+    private func subtract(firstOperand: Int, secondOperand: Int) -> Int {
+        return firstOperand - secondOperand
     }
     
-    private func divide(firstOp: Int, secondOp: Int) throws -> Int {
-        if secondOp == 0 {
-            throw DivisonError.dividedByZero
+    private func divide(firstOperand: Int, secondOperand: Int) throws -> Int {
+        // Division by 0 error check
+        guard secondOperand != 0 else { throw DivisionError.dividedByZero }
+        return firstOperand / secondOperand
+    }
+    
+    private func multiply(firstOperand: Int, secondOperand: Int) -> Int {
+        return firstOperand * secondOperand
+    }
+    
+    private func modulus(firstOperand: Int, secondOperand: Int) throws -> Int {
+        // Modulus by 0 error check
+        guard secondOperand != 0 else { throw ModulusError.dividedByZero }
+        return firstOperand % secondOperand
+    }
+    
+    
+    /// Process operators and execute related function
+    /// - Parameters:
+    ///   - op: ooperation (+, -, /, %, x)
+    ///   - firstNum: x of x+y expression
+    ///   - secondNum: y of x+y expression
+    /// - Returns: Result
+    private func processOperator(_ op: String, _ firstNum: Int, _ secondNum: Int) -> Int {
+        switch op {
+            case "+":
+                return add(firstOperand: firstNum, secondOperand: secondNum)
+            case "-":
+                return subtract(firstOperand: firstNum, secondOperand: secondNum)
+            case "x":
+                return multiply(firstOperand: firstNum, secondOperand: secondNum)
+            case "/":
+                do {
+                    return try divide(firstOperand: firstNum, secondOperand: secondNum)
+                } catch DivisionError.dividedByZero {
+                    print("Error: Division by zero.")
+                    exit(1)
+                } catch {
+                    print(error)
+                    exit(1)
+                }
+            case "%":
+                do {
+                    return try modulus(firstOperand: firstNum, secondOperand: secondNum)
+                } catch ModulusError.dividedByZero {
+                    print("Error: Modulus by zero.")
+                    exit(1)
+                } catch {
+                    print(error)
+                    exit(1)
+                }
+            default:
+                print("Error: Unknown operator '\(op)'.")
+                exit(1)
         }
-        return firstOp / secondOp
     }
     
-    private func multiply(firstOp: Int, secondOp: Int) -> Int {
-        return firstOp * secondOp
-    }
     
-    private func modulus(firstOp: Int, secondOp: Int) throws -> Int {
-        if secondOp == 0 {
-            throw ModulusError.dividedByZero
-        }
-        return firstOp % secondOp
-    }
-    
-    private func validateArgs(_ args: [String]) throws {
-        if args.count % 2 == 0 {
-            throw CalculatorCoreError.invalidNumberofArguments
-        }
-    }
-    
-    public func calculate(_ args: [String]) -> Int {
-        do {
-            try validateArgs(args)
-        } catch {
-            print("Error: Invalid number of arguments.")
-            exit(1)
-        }
-        
-        let postfixExpression: [String] = PostFixExpression().infixToPostfix(args)
-        var stack: Stack<Int> = Stack<Int>()
-        
+    /// Algorithum to process a calculation written in Postfix expression
+    /// - Parameter postfixExpression: 1 2 + (1 + 2)
+    /// - Returns: Result
+    private func evaluatePostfixExpression(_ postfixExpression: [String]) -> Int {
+        var stack: Stack<Int> = Stack<Int>() // Used to resursively process the operation by segment
         
         for elem in postfixExpression {
+            // Condition will seperate operands from operators
             if let num: Int = Int(elem) {
                 stack.push(num)
             } else {
-                let firstNum = stack.pop()!
-                let secondNum = stack.pop()!
-                switch elem {
-                    case "+":
-                        stack.push(add(firstOp: secondNum, secondOp: firstNum))
-                    case "-":
-                        stack.push(subtract(firstOp: secondNum, secondOp: firstNum))
-                    case "x":
-                        stack.push(multiply(firstOp: secondNum, secondOp: firstNum))
-                    case "/":
-                        do {
-                            try stack.push(divide(firstOp: secondNum, secondOp: firstNum))
-                        } catch DivisonError.dividedByZero {
-                            print("Error: Denominator cannot be 0 for divisiion operation.")
-                            exit(1)
-                        } catch {
-                            print(error)
-                            exit(1)
-                        }
-                    case "%":
-                        do {
-                            try stack.push(modulus(firstOp: secondNum, secondOp: firstNum))
-                        } catch ModulusError.dividedByZero {
-                            print("Error: Denominator cannot be 0 for modulus operation.")
-                            exit(1)
-                        } catch {
-                            print(error)
-                            exit(1)
-                        }
-                    default:
-                        fatalError("Unknown operator: \(elem)")
+                // Extract the two operands
+                guard let firstNum: Int = stack.pop(), let secondNum: Int = stack.pop() else {
+                    print("Error: Malformed expression.")
+                    exit(1)
                 }
+                // Process the calculation and save the result back to the stack
+                stack.push(processOperator(elem, secondNum, firstNum))
             }
         }
-        return stack.pop()!
+        
+        guard let result = stack.pop() else {
+            print("Error: Expression evaluation failed.")
+            exit(1)
+        }
+        return result
+    }
+    
+    /// Start of the calcualtion process
+    public func calculate(_ args: [String]) -> Int {
+        // Operation always should have odd numbered characters
+        guard args.count % 2 != 0 else {
+            print("Error: Invalid expression.")
+            exit(1)
+        }
+        
+        do {
+            let postfixExpression: [String] = try PostFixExpression().infixToPostfix(args)
+            return evaluatePostfixExpression(postfixExpression) // Final value
+        } catch CalculatorCoreError.invalidOperator {
+            print("Error: Invalid operator.")
+            exit(1)
+        } catch {
+            print(error)
+            exit(1)
+        }
     }
 }

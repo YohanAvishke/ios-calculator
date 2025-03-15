@@ -1,9 +1,9 @@
 enum CalculatorCoreError: Error {
-    case calculationFailed
     case invalidNumberofArguments
+    case invalidOperator
 }
 
-enum DivisonError: Error {
+enum DivisionError: Error {
     case dividedByZero
 }
 
